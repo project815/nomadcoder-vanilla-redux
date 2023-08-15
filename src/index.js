@@ -32,10 +32,11 @@ const deleteTodo = (id) => {
 const reducer = (state = [], action) => {
   switch (action.type) {
     case TO_DO_ADD:
-      return [...state, { text: action.text, id: Date.now() }];
+      const newTodoObj = { text: action.text, id: Date.now() };
+      return [newTodoObj, ...state];
     case TO_DO_DELETE:
-      state.map((todo) => console.log(todo.id));
-      return state.filter((todo) => todo.id !== action.id);
+      const cleaned = state.filter((toDo) => toDo.id !== parseInt(action.id));
+      return cleaned;
     default:
       return state;
   }
@@ -56,10 +57,9 @@ const dispatchDeleteTodo = (e) => {
 };
 
 const paintToDocs = () => {
-  console.log("실행");
   const toDos = store.getState();
-
   ul.innerHTML = "";
+
   toDos.forEach((toDo) => {
     const li = document.createElement("li");
     const btn = document.createElement("button");
