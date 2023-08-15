@@ -34,13 +34,8 @@ const reducer = (state = [], action) => {
     case TO_DO_ADD:
       return [...state, { text: action.text, id: Date.now() }];
     case TO_DO_DELETE:
-      state.forEach((toDo) => {
-        if (toDo.id === action.id) {
-          console.log(toDo.id, action.id);
-          document.getElementById(toDo.id).remove();
-        }
-      });
-      return [];
+      state.map((todo) => console.log(todo.id));
+      return state.filter((todo) => todo.id !== action.id);
     default:
       return state;
   }
@@ -56,6 +51,7 @@ const dispatchAddToDo = (text) => {
 
 const dispatchDeleteTodo = (e) => {
   const id = e.target.parentNode.id;
+  console.log("paseInt id", parseInt(id));
   store.dispatch(deleteTodo(id));
 };
 
@@ -87,3 +83,9 @@ const onSubmit = (e) => {
 };
 
 form.addEventListener("submit", onSubmit);
+
+//메모리 주소가 같은 위치에 있는 객체라도, 내부의 내용이 변경되면 불변성이 깨지게 됩니다.
+//불변성을 유지해야 함.
+//리액트 컴포넌트의 재랜더링 문제
+//Redux 상태 추적 문제
+//이전 상태는 그대로 유지되고, 변경 사항을 추적하고 관리하기 쉬워집니다. 상태를 직접 변경하면 예측 불가능한 버그가 발생할 수 있고, Redux의 핵심 원칙 중 하나인 "time-travel debugging"과 같은 기능을 활용할 수 없습니다.
